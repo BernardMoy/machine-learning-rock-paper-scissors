@@ -34,17 +34,6 @@ def player(
         "SSP": 0,
         "SSS": 0,
     },
-    order2={
-        "RR": 0,
-        "RP": 0,
-        "RS": 0,
-        "PR": 0,
-        "PP": 0,
-        "PS": 0,
-        "SR": 0,
-        "SP": 0,
-        "SS": 0,
-    },
 ):
 
     ideal_response = {"P": "S", "R": "P", "S": "R"}
@@ -55,11 +44,14 @@ def player(
 
     # First attempt
     if not prev_play:
-        prev_play = "R"
+        prev_play = "P"
         opponent_history.append(
-            "R"
+            prev_play
         )  # Assume opponent first play R and keep track of the count of it
-        return "P"
+        return "S"
+
+    elif len(opponent_history) < 3:
+        return ideal_response[prev_play]
 
     # Len of history at least 3
     else:
