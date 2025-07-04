@@ -2,9 +2,10 @@
 
 
 # prev_play auto updates.
-def player(prev_play, opponent_history=[]):
-
-    order = {
+def player(
+    prev_play,
+    opponent_history=[],
+    order={
         "RRR": 0,
         "RRP": 0,
         "RRS": 0,
@@ -32,43 +33,35 @@ def player(prev_play, opponent_history=[]):
         "SSR": 0,
         "SSP": 0,
         "SSS": 0,
-    }
+    },
+):
 
     ideal_response = {"P": "S", "R": "P", "S": "R"}
 
     # First attempt
     if not prev_play:
         prev_play = "R"
-        opponent_history.append("R")
-        opponent_history.append(prev_play)
-        return "R"
+        opponent_history.append(
+            "R"
+        )  # Assume opponent first play R and keep track of the count of it
+        return "P"
 
-    # when len of opponent history less than 3, return the ideal response of the previous play (Similar to Kris)
-    elif len(opponent_history) < 3:
-        opponent_history.append("R")
+    # when len of opponent history less than 2, return the ideal response of the previous play (Similar to Kris)
+    elif len(opponent_history) < 2:
         opponent_history.append(prev_play)
         return ideal_response[prev_play]
 
     # Len of history at least 3
     else:
-        opponent_history.append(prev_play)
+        opponent_history.append(prev_play)  # <-- Opponent history is 3 here
 
         # extract the last 3 moves
         prev3 = "".join(opponent_history[-3:])
         order[prev3] += 1
 
-        # Find all the potential plays
-        potential_plays = [
-            prev_play + "RR",
-            prev_play + "RS",
-            prev_play + "RP",
-            prev_play + "PR",
-            prev_play + "PP",
-            prev_play + "PS",
-            prev_play + "SR",
-            prev_play + "SP",
-            prev_play + "SS",
-        ]
+        # Find all the potential plays by first extracting the 2 previous moves
+        prev2 = "".join(opponent_history[-2:])
+        potential_plays = [prev2 + "R", prev2 + "P", prev2 + "S"]
 
         # Find the most frequent sequence
         most_frequent = ""
