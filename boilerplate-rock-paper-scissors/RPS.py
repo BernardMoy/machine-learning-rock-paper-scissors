@@ -5,7 +5,7 @@
 def player(
     prev_play,
     opponent_history=[],
-    order={},
+    order={},  # Stores all the values ranging from "RRRR", "RRRP"... "SSSS"
 ):
 
     ideal_response = {"P": "S", "R": "P", "S": "R"}
@@ -25,15 +25,15 @@ def player(
     elif len(opponent_history) < 4:
         return ideal_response[prev_play]
 
-    # Len of history at least 3
+    # Len of history at least 4
     else:
-        # extract the last 3 moves
-        prev3 = "".join(opponent_history[-4:])
-        order[prev3] = order.get(prev3, 0) + 1
+        # extract the last 4 moves
+        prev4 = "".join(opponent_history[-4:])
+        order[prev4] = order.get(prev4, 0) + 1
 
-        # Find all the potential plays by first extracting the 2 previous moves
-        prev2 = "".join(opponent_history[-3:])
-        potential_plays = [prev2 + "R", prev2 + "P", prev2 + "S"]
+        # Find all the potential plays by first extracting the 3 previous moves
+        prev3 = "".join(opponent_history[-3:])
+        potential_plays = [prev3 + "R", prev3 + "P", prev3 + "S"]
 
         # Find the most frequent sequence
         most_frequent = ""
