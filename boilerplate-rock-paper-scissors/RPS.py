@@ -5,35 +5,7 @@
 def player(
     prev_play,
     opponent_history=[],
-    order={
-        "RRR": 0,
-        "RRP": 0,
-        "RRS": 0,
-        "RPR": 0,
-        "RPP": 0,
-        "RPS": 0,
-        "RSR": 0,
-        "RSP": 0,
-        "RSS": 0,
-        "PRR": 0,
-        "PRP": 0,
-        "PRS": 0,
-        "PPR": 0,
-        "PPP": 0,
-        "PPS": 0,
-        "PSR": 0,
-        "PSP": 0,
-        "PSS": 0,
-        "SRR": 0,
-        "SRP": 0,
-        "SRS": 0,
-        "SPR": 0,
-        "SPP": 0,
-        "SPS": 0,
-        "SSR": 0,
-        "SSP": 0,
-        "SSS": 0,
-    },
+    order={},
 ):
 
     ideal_response = {"P": "S", "R": "P", "S": "R"}
@@ -48,27 +20,27 @@ def player(
         opponent_history.append(
             prev_play
         )  # Assume opponent first play R and keep track of the count of it
-        return "S"
+        return "R"
 
-    elif len(opponent_history) < 3:
+    elif len(opponent_history) < 4:
         return ideal_response[prev_play]
 
     # Len of history at least 3
     else:
         # extract the last 3 moves
-        prev3 = "".join(opponent_history[-3:])
-        order[prev3] += 1
+        prev3 = "".join(opponent_history[-4:])
+        order[prev3] = order.get(prev3, 0) + 1
 
         # Find all the potential plays by first extracting the 2 previous moves
-        prev2 = "".join(opponent_history[-2:])
+        prev2 = "".join(opponent_history[-3:])
         potential_plays = [prev2 + "R", prev2 + "P", prev2 + "S"]
 
         # Find the most frequent sequence
         most_frequent = ""
         cur = -1
         for p in potential_plays:
-            if order[p] > cur:
-                cur = order[p]
+            if order.get(p, 0) > cur:
+                cur = order.get(p, 0)
                 most_frequent = p
 
         # Extract the next move, and return the ideal response of it
