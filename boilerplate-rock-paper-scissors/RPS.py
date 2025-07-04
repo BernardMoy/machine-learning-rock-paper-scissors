@@ -34,9 +34,24 @@ def player(
         "SSP": 0,
         "SSS": 0,
     },
+    order2={
+        "RR": 0,
+        "RP": 0,
+        "RS": 0,
+        "PR": 0,
+        "PP": 0,
+        "PS": 0,
+        "SR": 0,
+        "SP": 0,
+        "SS": 0,
+    },
 ):
 
     ideal_response = {"P": "S", "R": "P", "S": "R"}
+
+    # Append the opponent history
+    if prev_play:
+        opponent_history.append(prev_play)
 
     # First attempt
     if not prev_play:
@@ -46,15 +61,8 @@ def player(
         )  # Assume opponent first play R and keep track of the count of it
         return "P"
 
-    # when len of opponent history less than 2, return the ideal response of the previous play (Similar to Kris)
-    elif len(opponent_history) < 2:
-        opponent_history.append(prev_play)
-        return ideal_response[prev_play]
-
     # Len of history at least 3
     else:
-        opponent_history.append(prev_play)  # <-- Opponent history is 3 here
-
         # extract the last 3 moves
         prev3 = "".join(opponent_history[-3:])
         order[prev3] += 1
@@ -72,4 +80,4 @@ def player(
                 most_frequent = p
 
         # Extract the next move, and return the ideal response of it
-        return ideal_response[most_frequent[1]]
+        return ideal_response[most_frequent[-1]]
