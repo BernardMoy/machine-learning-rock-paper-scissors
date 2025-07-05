@@ -7,6 +7,8 @@ def player(
     opponent_history=[],
     order={},  # Stores all the values ranging from "RRRR", "RRRP"... "SSSS"
 ):
+    # The number of sequences to track. Abbey uses 2, and 5 is required to pass the tests
+    n = 5
 
     ideal_response = {"P": "S", "R": "P", "S": "R"}
 
@@ -22,18 +24,18 @@ def player(
         )  # Assume opponent first play R and keep track of the count of it
         return "R"
 
-    elif len(opponent_history) < 4:
-        return ideal_response[prev_play]
+    elif len(opponent_history) < n:
+        return "R"
 
-    # Len of history at least 4
+    # Len of history at least 5
     else:
-        # extract the last 4 moves
-        prev4 = "".join(opponent_history[-4:])
-        order[prev4] = order.get(prev4, 0) + 1
+        # extract the last 5 moves
+        prev5 = "".join(opponent_history[-n:])
+        order[prev5] = order.get(prev5, 0) + 1
 
-        # Find all the potential plays by first extracting the 3 previous moves
-        prev3 = "".join(opponent_history[-3:])
-        potential_plays = [prev3 + "R", prev3 + "P", prev3 + "S"]
+        # Find all the potential plays by first extracting the 4 previous moves
+        prev4 = "".join(opponent_history[-(n - 1) :])
+        potential_plays = [prev4 + "R", prev4 + "P", prev4 + "S"]
 
         # Find the most frequent sequence
         most_frequent = ""
